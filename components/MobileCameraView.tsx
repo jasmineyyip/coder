@@ -121,10 +121,10 @@ export default function MobileCameraView() {
         <button
           type="button"
           onClick={takePhoto}
-          className="flex items-center justify-center w-30 h-30 rounded-full bg-slate-600 text-white active:bg-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          className="flex items-center justify-center w-28 h-28 rounded-full bg-slate-600 text-white active:bg-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           aria-label="Take photo"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-15 h-15" aria-hidden>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-14 h-14" aria-hidden>
             <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
             <path fillRule="evenodd" d="M9.88 3.88A.75.75 0 0 1 10.5 3.75h3a.75.75 0 0 1 .62.12l.96.72 1.25.94a.75.75 0 0 1 .22.54v2.73a.75.75 0 0 1-1.5 0V7.31l-.97-.73-1.25-.94a.75.75 0 0 1-.22-.54V4.5h-1.5v.54a.75.75 0 0 1-.22.54l-1.25.94-.97.73v6.35a.75.75 0 0 1-1.5 0V9.54a.75.75 0 0 1 .22-.54l1.25-.94.96-.72ZM6 10.5a.75.75 0 0 1 .75.75v5.25c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25V11.25a.75.75 0 0 1 1.5 0v5.25A2.75 2.75 0 0 1 18.25 19H7.75A2.75 2.75 0 0 1 5 16.25V11.25a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
           </svg>
@@ -133,11 +133,11 @@ export default function MobileCameraView() {
           type="button"
           onClick={sendPhotos}
           disabled={sending || photos.length === 0}
-          className="flex items-center justify-center w-30 h-30 rounded-full bg-emerald-600 text-white disabled:opacity-50 disabled:pointer-events-none active:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          className="flex items-center justify-center w-28 h-28 rounded-full bg-emerald-600 text-white disabled:opacity-50 disabled:pointer-events-none active:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           aria-label={sending ? "Sending photos" : "Send photos"}
           aria-busy={sending}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-15 h-15" aria-hidden>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-14 h-14" aria-hidden>
             <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
           </svg>
         </button>
