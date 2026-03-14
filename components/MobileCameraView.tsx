@@ -117,28 +117,20 @@ export default function MobileCameraView() {
         <canvas ref={canvasRef} className="hidden" />
       </div>
 
-      <div className="flex-shrink-0 flex items-center justify-between gap-4 px-4 py-4 bg-slate-900/90 border-t border-slate-700">
+      <div className="flex-shrink-0 flex items-center justify-center gap-4 px-4 py-4 bg-slate-900/90 border-t border-slate-700">
         <button
           type="button"
           onClick={takePhoto}
-          className="flex-1 py-3 px-4 rounded-lg bg-slate-600 text-white font-medium active:bg-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          className="py-3 px-5 rounded-lg bg-slate-600 text-white font-medium active:bg-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           aria-label="Take photo"
         >
           Take photo
         </button>
-        <span
-          className="text-slate-400 text-sm tabular-nums"
-          role="status"
-          aria-live="polite"
-          aria-label={`${photos.length} photo${photos.length !== 1 ? "s" : ""} in session`}
-        >
-          {photos.length} photo{photos.length !== 1 ? "s" : ""}
-        </span>
         <button
           type="button"
           onClick={sendPhotos}
           disabled={sending || photos.length === 0}
-          className="flex-1 py-3 px-4 rounded-lg bg-emerald-600 text-white font-medium disabled:opacity-50 disabled:pointer-events-none active:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          className="py-3 px-5 rounded-lg bg-emerald-600 text-white font-medium disabled:opacity-50 disabled:pointer-events-none active:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           aria-label={sending ? "Sending photos" : "Send photos"}
           aria-busy={sending}
         >
