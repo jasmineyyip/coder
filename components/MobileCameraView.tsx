@@ -141,6 +141,14 @@ export default function MobileCameraView() {
             <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
           </svg>
         </button>
+        <span
+          className="text-slate-400 text-sm tabular-nums ml-1"
+          role="status"
+          aria-live="polite"
+          aria-label={`${photos.length} photo${photos.length !== 1 ? "s" : ""} in session`}
+        >
+          {photos.length} photo{photos.length !== 1 ? "s" : ""}
+        </span>
       </div>
 
       <div className="flex-shrink-0 px-4 pb-2 min-h-[1.5rem]" role="status" aria-live="polite">

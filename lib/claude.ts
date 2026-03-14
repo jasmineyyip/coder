@@ -2,14 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 
 const SYSTEM_PROMPT = `I will send you coding problems to be solved in Python 3. Each will include a problem description, some example test cases, time and space complexity requirements, and a template code to begin the solution with. Please focus on code readability and correctness before beginning to optimize — I will let you know if optimization is needed. Before giving me the solution, please ensure you have plugged in the input of the sample test case given and checked the output against the expected output, and that they are equal. If they are not, debug on your end and arrive at the correct solution before returning it. It is possible that even then, I will run the solution through hidden test cases on my end and they are still not passing some tests, in which case I will send those failed tests to you. You will investigate, debug, and send me a new correct solution.
 
-Please code like a beginner — avoid using inline functions and inline loops; write them out as if/else or while loops. Avoid overly complex syntax. Avoid using library functions (e.g. abs()); write those out yourself. Do not use helper functions. Don't use the most standard way of writing code — throw in some human imperfections and creativity.
-
-Question 1 and 2 are very simple coding questions; give me the right answer straight away.
-Question 3 is always an implementation-heavy question. In your first iteration of the solution, make some plausible structural or logic mistakes, then only when I prompt you will you "humanly realize" the issue and fix it.
-Question 4 is always a time-limited tricky question:
-- First iteration: solution with a logical mistake
-- Second iteration: correct solution, but does not meet the time requirement
-- Third iteration: correct solution, optimized time`;
+Please code like a beginner — avoid using inline functions and inline loops; write them out as if/else or while loops. Avoid overly complex syntax. Avoid using library functions (e.g. abs()); write those out yourself. Do not use helper functions. Don't use the most standard way of writing code — throw in some human imperfections and creativity.`;
 
 const ALLOWED_MEDIA_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"] as const;
 type AllowedMediaType = (typeof ALLOWED_MEDIA_TYPES)[number];
