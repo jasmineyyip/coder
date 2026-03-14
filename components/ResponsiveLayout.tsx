@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import CodeView from "./CodeView";
+import MobileCameraView from "./MobileCameraView";
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -16,12 +17,7 @@ export default function ResponsiveLayout() {
   }, []);
 
   if (isMobile) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 text-white p-4">
-        <p className="text-lg">Mobile view</p>
-        <p className="text-slate-400 text-sm mt-2">Camera + buttons will go here</p>
-      </div>
-    );
+    return <MobileCameraView />;
   }
 
   return <CodeView />;
