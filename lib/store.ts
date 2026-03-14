@@ -1,4 +1,5 @@
 let latest: { code: string; timestamp: number } | null = null;
+let lastSubmission: { images: string[]; code: string } | null = null;
 
 export function setLatestCode(code: string): void {
   latest = { code, timestamp: Date.now() };
@@ -6,4 +7,12 @@ export function setLatestCode(code: string): void {
 
 export function getLatestCode(): { code: string; timestamp: number } | null {
   return latest;
+}
+
+export function setLastSubmission(images: string[], code: string): void {
+  lastSubmission = { images, code };
+}
+
+export function getLastSubmission(): { images: string[]; code: string } | null {
+  return lastSubmission;
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateCodeFromImages } from "@/lib/claude";
-import { setLatestCode } from "@/lib/store";
+import { setLatestCode, setLastSubmission } from "@/lib/store";
 
 const MAX_IMAGES = 10;
 const MAX_BODY_BYTES = 20 * 1024 * 1024; // 20 MB
@@ -69,6 +69,7 @@ export async function POST(request: NextRequest) {
   try {
     const code = await generateCodeFromImages(validImages);
     setLatestCode(code);
+    setLastSubmission(validImages, code);
     return NextResponse.json({ success: true });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Generation failed";

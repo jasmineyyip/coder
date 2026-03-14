@@ -56,3 +56,53 @@ export async function generateCodeFromImages(
 
   return textBlock.text;
 }
+
+export type RegenerateReason = "logic_wrong" | "runtime_too_long";
+
+const REGENERATE_REASON_TEXT: Record<RegenerateReason, string> = {
+  logic_wrong:
+    "The previous solution had wrong logic (incorrect output or failed test cases). Please fix the logic and return a corrected Python 3 solution. Return only the code, no explanation.",
+  runtime_too_long:
+    "The previous solution was logically correct but exceeded the time limit. Please return an optimized Python 3 solution that meets the time complexity requirement. Return only the code, no explanation.",
+};
+
+export async function regenerateCodeFromFeedback(
+  imageBase64List: string[],
+  previousCode: string,
+  reason: RegenerateReason
+): Promise<string> {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error("ANTHROPIC_API_KEY is not set");
+  }
+
+  const anthropic = new Anthropic({ apiKey });
+
+  const instruction = REGENERATE_REASON_TEXT[reason];
+  const content: Anthropic.MessageParam["content"] = [
+    {
+      type: "text",
+      text: `${instruction}\n\nHere was the previous solution:\n\n\`\`\`python\n${previousCode}\n\`\`\``,
+    },
+    ...imageBase64List.flatMap((img) => {
+      const { mediaType, base64 } = parseBase64DataUrl(img);
+      return [
+        { type: "image" as const, source: { type: "base64" as const, media_type: mediaType, data: base64 } },
+      ];
+    }),
+  ];
+
+  const message = await anthropic.messages.create({
+    model: "claude-sonnet-4-6",
+    max_tokens: 8192,
+    system: SYSTEM_PROMPT,
+    messages: [{ role: "user", content }],
+  });
+
+  const textBlock = message.content.find((b) => b.type === "text");
+  if (!textBlock || textBlock.type !== "text") {
+    throw new Error("No text in Claude response");
+  }
+
+  return textBlock.text;
+}

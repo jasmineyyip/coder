@@ -19,6 +19,8 @@ export default function CodeView() {
   const [timestamp, setTimestamp] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [regenerating, setRegenerating] = useState(false);
+  const [regenerateError, setRegenerateError] = useState<string | null>(null);
 
   const poll = useCallback(async () => {
     try {
@@ -40,6 +42,28 @@ export default function CodeView() {
     const id = setInterval(poll, POLL_INTERVAL_MS);
     return () => clearInterval(id);
   }, [poll]);
+
+  const handleRegenerate = useCallback(
+    async (reason: "logic_wrong" | "runtime_too_long") => {
+      setRegenerateError(null);
+      setRegenerating(true);
+      try {
+        const res = await fetch("/api/regenerate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reason }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          setRegenerateError((data.error as string) || `Request failed (${res.status})`);
+          return;
+        }
+      } finally {
+        setRegenerating(false);
+      }
+    },
+    []
+  );
 
   if (error) {
     return (
@@ -96,8 +120,13 @@ export default function CodeView() {
           Last updated: {lastUpdated}
         </div>
       )}
+      {regenerateError && (
+        <div className="flex-shrink-0 px-4 py-1.5 bg-slate-800 border-b border-slate-700">
+          <p className="text-red-400 text-sm">{regenerateError}</p>
+        </div>
+      )}
       <div
-        className="flex-1 overflow-auto p-4"
+        className="flex-1 overflow-auto p-4 pb-20"
         role="region"
         aria-label="Generated Python code"
       >
@@ -115,6 +144,26 @@ export default function CodeView() {
         >
           {code}
         </SyntaxHighlighter>
+      </div>
+      <div className="fixed bottom-0 left-0 flex gap-2 p-3">
+        <button
+          type="button"
+          onClick={() => handleRegenerate("logic_wrong")}
+          disabled={regenerating}
+          className="py-2 px-4 rounded-lg bg-slate-600 text-white text-sm font-medium disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          aria-label="Solution logic was wrong, regenerate"
+        >
+          Logic wrong
+        </button>
+        <button
+          type="button"
+          onClick={() => handleRegenerate("runtime_too_long")}
+          disabled={regenerating}
+          className="py-2 px-4 rounded-lg bg-slate-600 text-white text-sm font-medium disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          aria-label="Runtime too long, optimize and regenerate"
+        >
+          Runtime too long
+        </button>
       </div>
     </div>
   );
