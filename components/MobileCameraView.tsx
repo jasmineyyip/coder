@@ -11,6 +11,7 @@ export default function MobileCameraView() {
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+  const [sendSuccess, setSendSuccess] = useState(false);
 
   useEffect(() => {
     let stream: MediaStream | null = null;
@@ -28,7 +29,12 @@ export default function MobileCameraView() {
         video.srcObject = stream;
         await video.play();
       } catch (err) {
-        setCameraError(err instanceof Error ? err.message : "Could not access camera");
+        const msg = err instanceof Error ? err.message : "";
+        setCameraError(
+          msg.toLowerCase().includes("permission")
+            ? "Camera access denied. Allow camera in browser settings and refresh."
+            : msg || "Could not access camera."
+        );
       }
     };
     start();
@@ -64,6 +70,7 @@ export default function MobileCameraView() {
     }
     setSending(true);
     setSendError(null);
+    setSendSuccess(false);
     try {
       const res = await fetch("/api/submit-photos", {
         method: "POST",
@@ -76,6 +83,8 @@ export default function MobileCameraView() {
         return;
       }
       setPhotos([]);
+      setSendSuccess(true);
+      setTimeout(() => setSendSuccess(false), 3000);
     } finally {
       setSending(false);
     }
@@ -83,7 +92,11 @@ export default function MobileCameraView() {
 
   if (cameraError) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 text-white p-4">
+      <div
+        className="min-h-screen flex flex-col items-center justify-center bg-slate-900 text-white p-4"
+        role="alert"
+        aria-label="Camera error"
+      >
         <p className="text-red-400 text-center">{cameraError}</p>
         <p className="text-slate-400 text-sm mt-2 text-center">
           Allow camera access and refresh.
@@ -108,30 +121,39 @@ export default function MobileCameraView() {
         <button
           type="button"
           onClick={takePhoto}
-          className="flex-1 py-3 px-4 rounded-lg bg-slate-600 text-white font-medium active:bg-slate-500"
+          className="flex-1 py-3 px-4 rounded-lg bg-slate-600 text-white font-medium active:bg-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           aria-label="Take photo"
         >
           Take photo
         </button>
-        <span className="text-slate-400 text-sm tabular-nums">
+        <span
+          className="text-slate-400 text-sm tabular-nums"
+          role="status"
+          aria-live="polite"
+          aria-label={`${photos.length} photo${photos.length !== 1 ? "s" : ""} in session`}
+        >
           {photos.length} photo{photos.length !== 1 ? "s" : ""}
         </span>
         <button
           type="button"
           onClick={sendPhotos}
           disabled={sending || photos.length === 0}
-          className="flex-1 py-3 px-4 rounded-lg bg-emerald-600 text-white font-medium disabled:opacity-50 disabled:pointer-events-none active:bg-emerald-500"
-          aria-label="Send photos"
+          className="flex-1 py-3 px-4 rounded-lg bg-emerald-600 text-white font-medium disabled:opacity-50 disabled:pointer-events-none active:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          aria-label={sending ? "Sending photos" : "Send photos"}
+          aria-busy={sending}
         >
           {sending ? "Sending…" : "Send"}
         </button>
       </div>
 
-      {sendError && (
-        <div className="flex-shrink-0 px-4 pb-2">
+      <div className="flex-shrink-0 px-4 pb-2 min-h-[1.5rem]" role="status" aria-live="polite">
+        {sendError && (
           <p className="text-red-400 text-sm text-center">{sendError}</p>
-        </div>
-      )}
+        )}
+        {sendSuccess && !sendError && (
+          <p className="text-emerald-400 text-sm text-center">Sent. Code will appear on iPad.</p>
+        )}
+      </div>
     </div>
   );
 }
