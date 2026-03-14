@@ -44,7 +44,7 @@ export default function CodeView() {
   }, [poll]);
 
   const handleRegenerate = useCallback(
-    async (reason: "logic_wrong" | "runtime_too_long" | "alternative") => {
+    async (reason: "logic_wrong" | "runtime_too_long" | "alternative" | "brute_force") => {
       setRegenerateError(null);
       setRegenerating(true);
       try {
@@ -160,9 +160,18 @@ export default function CodeView() {
           onClick={() => handleRegenerate("runtime_too_long")}
           disabled={regenerating}
           className="py-2 px-4 rounded-lg bg-slate-600 text-white text-sm font-medium disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
-          aria-label="Runtime too long, optimize and regenerate"
+          aria-label="Optimized solution, regenerate"
         >
-          Runtime too long
+          Optimized
+        </button>
+        <button
+          type="button"
+          onClick={() => handleRegenerate("brute_force")}
+          disabled={regenerating}
+          className="py-2 px-4 rounded-lg bg-slate-600 text-white text-sm font-medium disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          aria-label="Brute force solution, regenerate"
+        >
+          Brute force
         </button>
         <button
           type="button"

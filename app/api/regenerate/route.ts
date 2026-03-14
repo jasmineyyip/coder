@@ -23,9 +23,9 @@ export async function POST(request: NextRequest) {
   }
 
   const reason = (body as { reason?: string })?.reason;
-  if (reason !== "logic_wrong" && reason !== "runtime_too_long" && reason !== "alternative") {
+  if (reason !== "logic_wrong" && reason !== "runtime_too_long" && reason !== "alternative" && reason !== "brute_force") {
     return NextResponse.json(
-      { error: "Body must be { reason: \"logic_wrong\" | \"runtime_too_long\" | \"alternative\" }" },
+      { error: "Body must be { reason: \"logic_wrong\" | \"runtime_too_long\" | \"alternative\" | \"brute_force\" }" },
       { status: 400 }
     );
   }

@@ -55,7 +55,7 @@ export async function generateCodeFromImages(
   return textBlock.text;
 }
 
-export type RegenerateReason = "logic_wrong" | "runtime_too_long" | "alternative";
+export type RegenerateReason = "logic_wrong" | "runtime_too_long" | "alternative" | "brute_force";
 
 const REGENERATE_REASON_TEXT: Record<RegenerateReason, string> = {
   logic_wrong:
@@ -64,6 +64,8 @@ const REGENERATE_REASON_TEXT: Record<RegenerateReason, string> = {
     "The previous solution was logically correct but exceeded the time limit. Please return an optimized Python 3 solution that meets the time complexity requirement. Return only the code, no explanation.",
   alternative:
     "The previous solution is correct and passes the test cases. The user wants to see a different valid solution: use a different code structure, different logic or algorithm, different variable names or control flow, but still pass all the same test cases and meet the requirements. Return a distinct alternative implementation in Python 3. Return only the code, no explanation.",
+  brute_force:
+    "The user wants a brute force (naive) solution: the simplest, most straightforward approach that correctly solves the problem and passes the given test cases. Do not optimize for time or space; use the most direct logic (e.g. try all possibilities, nested loops if needed). Return only the Python 3 code, no explanation.",
 };
 
 export async function regenerateCodeFromFeedback(
