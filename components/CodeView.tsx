@@ -19,12 +19,12 @@ async function fetchLatestCode(): Promise<CodeResponse> {
   return res.json();
 }
 
-function GeneratingOverlay({ compact }: { compact?: boolean }) {
+function GeneratingOverlay({ variant }: { variant: "fullscreen" | "fixed" }) {
   return (
     <div
       className={
-        compact
-          ? "absolute inset-0 z-20 flex flex-col items-center justify-center bg-slate-950/92 backdrop-blur-sm p-6"
+        variant === "fixed"
+          ? "fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-950/95 backdrop-blur-md p-6"
           : "min-h-screen flex flex-col items-center justify-center bg-slate-900 p-6"
       }
       role="status"
@@ -33,15 +33,15 @@ function GeneratingOverlay({ compact }: { compact?: boolean }) {
       aria-label="Generating new solution"
     >
       <div
-        className="w-14 h-14 border-4 border-slate-500 border-t-emerald-400 rounded-full animate-spin mb-5 shrink-0"
+        className="w-16 h-16 border-4 border-slate-500 border-t-emerald-400 rounded-full animate-spin mb-6 shrink-0"
         aria-hidden
       />
-      <p className="text-xl font-semibold text-white text-center">
+      <p className="text-2xl font-semibold text-white text-center">
         Generating new solution…
       </p>
-      <p className="text-base text-slate-400 text-center mt-3 max-w-md leading-relaxed">
-        This can take a little while. The code below will update automatically when
-        it&apos;s ready.
+      <p className="text-base text-slate-400 text-center mt-4 max-w-md leading-relaxed">
+        This can take a little while. The code will update automatically when it&apos;s
+        ready.
       </p>
     </div>
   );
@@ -139,7 +139,7 @@ export default function CodeView() {
 
   if (code == null) {
     if (serverGenerating) {
-      return <GeneratingOverlay />;
+      return <GeneratingOverlay variant="fullscreen" />;
     }
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 text-white p-4">
@@ -156,6 +156,7 @@ export default function CodeView() {
 
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col">
+      {busy && <GeneratingOverlay variant="fixed" />}
       {lastUpdated && (
         <div
           className="flex-shrink-0 px-4 py-2 text-slate-400 text-sm border-b border-slate-700"
@@ -171,12 +172,11 @@ export default function CodeView() {
         </div>
       )}
       <div
-        className="flex-1 overflow-auto p-4 pb-20 relative min-h-0"
+        className="flex-1 overflow-auto p-4 pb-20 min-h-0"
         role="region"
         aria-label="Generated Python code"
         aria-busy={busy}
       >
-        {busy && <GeneratingOverlay compact />}
         <SyntaxHighlighter
           language="python"
           style={oneDark}
@@ -186,8 +186,6 @@ export default function CodeView() {
             borderRadius: "0.5rem",
             fontSize: "0.875rem",
             minHeight: "100%",
-            opacity: busy ? 0.35 : 1,
-            transition: "opacity 0.2s",
           }}
           showLineNumbers
         >
