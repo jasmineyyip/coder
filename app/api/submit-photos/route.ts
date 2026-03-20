@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateCodeFromImages } from "@/lib/claude";
-import { setLatestCode, setLastSubmission } from "@/lib/store";
+import { setLatestCode, setLastSubmission, setGenerating } from "@/lib/store";
 
 const MAX_IMAGES = 10;
 const MAX_BODY_BYTES = 20 * 1024 * 1024; // 20 MB
@@ -66,6 +66,7 @@ export async function POST(request: NextRequest) {
   }
 
   processing = true;
+  setGenerating(true);
   try {
     const code = await generateCodeFromImages(validImages);
     setLatestCode(code);
@@ -78,6 +79,7 @@ export async function POST(request: NextRequest) {
       { status: 502 }
     );
   } finally {
+    setGenerating(false);
     processing = false;
   }
 }

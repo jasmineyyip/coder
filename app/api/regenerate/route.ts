@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { regenerateCodeFromFeedback } from "@/lib/claude";
-import { getLastSubmission, setLatestCode, setLastSubmission } from "@/lib/store";
+import { getLastSubmission, setLatestCode, setLastSubmission, setGenerating } from "@/lib/store";
 
 let processing = false;
 
@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
   }
 
   processing = true;
+  setGenerating(true);
   try {
     const code = await regenerateCodeFromFeedback(last.images, last.code, reason);
     setLatestCode(code);
@@ -51,6 +52,7 @@ export async function POST(request: NextRequest) {
       { status: 502 }
     );
   } finally {
+    setGenerating(false);
     processing = false;
   }
 }

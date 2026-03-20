@@ -1,5 +1,14 @@
 let latest: { code: string; timestamp: number } | null = null;
 let lastSubmission: { images: string[]; code: string } | null = null;
+let generating = false;
+
+export function setGenerating(value: boolean): void {
+  generating = value;
+}
+
+export function isGenerating(): boolean {
+  return generating;
+}
 
 export function setLatestCode(code: string): void {
   latest = { code, timestamp: Date.now() };
