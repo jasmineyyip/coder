@@ -65,7 +65,10 @@ const REGENERATE_REASON_TEXT: Record<RegenerateReason, string> = {
   alternative:
     "The previous solution is correct and passes the test cases. The user wants to see a different valid solution: use a different code structure, different logic or algorithm, different variable names or control flow, but still pass all the same test cases and meet the requirements. Return a distinct alternative implementation in Python 3. Return only the code, no explanation.",
   brute_force:
-    "The user wants a brute force (naive) solution: the simplest, most straightforward approach that correctly solves the problem and passes the given test cases. Do not optimize for time or space; use the most direct logic (e.g. try all possibilities, nested loops if needed). Return only the Python 3 code, no explanation.",
+    "Context: The problem images are often from a coding assessment, sometimes the final question. The description may be short, but the most intuitive approach (e.g. many nested for-loops, checking every combination, scanning the whole space) would normally fail hidden tests because of runtime or memory limits stated on the screen.\n\n" +
+    "The user has chosen BRUTE FORCE on purpose. Your job is NOT to satisfy those runtime or space requirements. You must IGNORE any time complexity, space complexity, or optimization constraints written in the problem (e.g. O(n), O(n log n), \"must run within X ms\"). Pretend those constraints do not exist for this answer.\n\n" +
+    "Write the most brute-force, naive, and easy-to-follow solution you can: the solution a human would sketch first—clear logic, obvious steps, extra loops if that makes it simpler, no clever tricks. It should be correct for the stated examples and logically correct for the problem, but it is allowed to be slow and memory-heavy.\n\n" +
+    "Return only the Python 3 code, no explanation.",
 };
 
 export async function regenerateCodeFromFeedback(
